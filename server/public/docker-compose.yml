@@ -1,0 +1,42 @@
+version: "2"
+services:
+  overworld:
+    image: dstacademy/server:0.5.0
+    container_name: overworld
+    hostname: overworld
+    tty: true
+    stdin_open: true
+    cpuset: "0"
+    ports:
+      - "10999:10999/udp"
+    environment:
+      - TOKEN
+      - NAME=DST Academy
+      - DESCRIPTION=Don't starve alone! www.dst.academy
+      - MAX_PLAYERS=6
+      - STEAM_GROUP_ID=11349785
+      - STEAM_GROUP_ONLY=false
+      - STEAM_GROUP_ADMINS=false
+      - SHARD_ENABLE=true
+      - SHARD_NAME=overworld
+      - SHARD_IS_MASTER=true
+      - SHARD_CLUSTER_KEY=dsta
+  underworld:
+    image: dstacademy/server:0.5.0
+    container_name: underworld
+    hostname: underworld
+    tty: true
+    stdin_open: true
+    cpuset: "1"
+    ports:
+      - "11000:11000/udp"
+    links:
+      - overworld
+    environment:
+      - TOKEN
+      - SERVER_PORT=11000
+      - WORLD_PRESET=DST_CAVE
+      - SHARD_ENABLE=true
+      - SHARD_NAME=underworld
+      - SHARD_MASTER_IP=overworld
+      - SHARD_CLUSTER_KEY=dsta
